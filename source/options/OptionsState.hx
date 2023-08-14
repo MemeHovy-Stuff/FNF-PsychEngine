@@ -2,6 +2,7 @@ package options;
 
 import states.MainMenuState;
 import backend.StageData;
+import flixel.addons.transition.FlxTransitionableState;
 
 class OptionsState extends MusicBeatState
 {
@@ -10,21 +11,37 @@ class OptionsState extends MusicBeatState
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
 	public static var onPlayState:Bool = false;
+	var tipText:FlxText;
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
 			case 'Note Colors':
 				openSubState(new options.NotesSubState());
+			  #if android
+				removeVirtualPad();
+				#end
 			case 'Controls':
 				openSubState(new options.ControlsSubState());
+			  #if android
+				removeVirtualPad();
+				#end
 			case 'Graphics':
 				openSubState(new options.GraphicsSettingsSubState());
+			  #if android
+				removeVirtualPad();
+				#end
 			case 'Visuals and UI':
 				openSubState(new options.VisualsUISubState());
+		    #if android
+				removeVirtualPad();
+				#end
 			case 'Gameplay':
 				openSubState(new options.GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
 				MusicBeatState.switchState(new options.NoteOffsetState());
+			  #if android
+				removeVirtualPad();
+				#end
 		}
 	}
 
@@ -63,6 +80,23 @@ class OptionsState extends MusicBeatState
 		changeSelection();
 		ClientPrefs.saveSettings();
 
+		#if android
+		addVirtualPad(UP_DOWN, A_B_X_Y);
+
+		tipText = new FlxText(150, FlxG.height - 24, 0, 'Press X to Go In Android Controls Menu', 16);
+			tipText.setFormat("VCR OSD Mono", 17, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			tipText.borderSize = 1.25;
+			tipText.scrollFactor.set();
+			tipText.antialiasing = ClientPrefs.data.antialiasing;
+			add(tipText);
+			tipText = new FlxText(150, FlxG.height - 44, 0, 'Press Y to Go In Hitbox Settings Menu', 16);
+			tipText.setFormat("VCR OSD Mono", 17, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			tipText.borderSize = 1.25;
+			tipText.scrollFactor.set();
+			tipText.antialiasing = ClientPrefs.data.antialiasing;
+			add(tipText);
+	  	#end
+
 		super.create();
 	}
 
@@ -73,6 +107,17 @@ class OptionsState extends MusicBeatState
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+		#if android
+		if (MusicBeatState._virtualpad.buttonX.justPressed) {
+			FlxTransitionableState.skipNextTransIn = true;
+			FlxTransitionableState.skipNextTransOut = true;
+			MusicBeatState.switchState(new android.AndroidControlsMenu());
+		}
+		if (MusicBeatState._virtualpad.buttonY.justPressed) {
+			removeVirtualPad();
+			openSubState(new android.HitboxSettingsSubState());
+		}
+		#end
 
 		if (controls.UI_UP_P) {
 			changeSelection(-1);
