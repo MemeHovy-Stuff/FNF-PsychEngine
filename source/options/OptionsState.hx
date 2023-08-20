@@ -32,7 +32,7 @@ class OptionsState extends MusicBeatState
 	var selectorRight:Alphabet;
 
 	override function create() {
-		#if desktop
+		#if (desktop && !hl)
 		DiscordClient.changePresence("Options Menu", null);
 		#end
 

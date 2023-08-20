@@ -79,7 +79,7 @@ class StoryMenuState extends MusicBeatState
 		grpLocks = new FlxTypedGroup<FlxSprite>();
 		add(grpLocks);
 
-		#if desktop
+		#if (desktop && !hl)
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
@@ -326,7 +326,7 @@ class StoryMenuState extends MusicBeatState
 				FreeplayState.destroyFreeplayVocals();
 			});
 			
-			#if MODS_ALLOWED
+			#if (MODS_ALLOWED && !hl)
 			DiscordClient.loadModRPC();
 			#end
 		} else {

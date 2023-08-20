@@ -1,6 +1,6 @@
 
 //Discord API
-#if desktop
+#if (desktop && !hl)
 import backend.Discord;
 #end
 

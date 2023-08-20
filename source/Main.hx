@@ -106,7 +106,7 @@ class Main extends Sprite
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 		#end
 
-		#if desktop
+		#if (desktop && !hl)
 		DiscordClient.start();
 		#end
 
@@ -169,7 +169,9 @@ class Main extends Sprite
 		Sys.println("Crash dump saved in " + Path.normalize(path));
 
 		Application.current.window.alert(errMsg, "Error!");
+		#if !hl
 		DiscordClient.shutdown();
+		#end
 		Sys.exit(1);
 	}
 	#end
