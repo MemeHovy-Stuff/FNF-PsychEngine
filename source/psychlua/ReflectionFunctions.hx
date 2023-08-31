@@ -34,8 +34,15 @@ class ReflectionFunctions
 			var myClass:Dynamic = Type.resolveClass(classVar);
 			if(myClass == null)
 			{
-				FunkinLua.luaTrace('getPropertyFromClass: Class $classVar not found', false, false, FlxColor.RED);
-				return null;
+				if (classVar.toLowerCase() == "playstate" || (classVar.contains('PlayState'))){
+					FunkinLua.luaTrace('getPropertyFromClass: Class $classVar not found, did you mean states.PlayState?', false, false);
+					myClass = Type.resolveClass('states.PlayState');
+				}
+				else
+				{
+					FunkinLua.luaTrace('getPropertyFromClass: Class $classVar not found', false, false, FlxColor.RED);
+					return null;
+				}
 			}
 
 			var split:Array<String> = variable.split('.');
@@ -52,8 +59,15 @@ class ReflectionFunctions
 			var myClass:Dynamic = Type.resolveClass(classVar);
 			if(myClass == null)
 			{
-				FunkinLua.luaTrace('getPropertyFromClass: Class $classVar not found', false, false, FlxColor.RED);
-				return null;
+				if (classVar.toLowerCase() == "playstate" || (classVar.contains('PlayState'))){
+					FunkinLua.luaTrace('getPropertyFromClass: Class $classVar not found, did you mean states.PlayState?', false, false);
+					myClass = Type.resolveClass('states.PlayState');
+				}
+				else
+				{
+					FunkinLua.luaTrace('getPropertyFromClass: Class $classVar not found', false, false, FlxColor.RED);
+					return null;
+				}
 			}
 
 			var split:Array<String> = variable.split('.');
